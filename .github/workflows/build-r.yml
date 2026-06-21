@@ -18,9 +18,10 @@ jobs:
         run: |
           cd ..
           R CMD build api-r
+          cp RDolphinDB_*.tar.gz api-r/
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: RDolphinDB
-          path: ../*.tar.gz
+          path: RDolphinDB_*.tar.gz
