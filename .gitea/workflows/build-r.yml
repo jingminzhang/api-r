@@ -1,0 +1,28 @@
+name: Build RDolphinDB
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: fedora:44
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install R and dependencies
+        run: |
+          dnf install -y R R-devel gcc gcc-c++ make
+
+      - name: Install Rcpp from Tsinghua mirror
+        run: |
+          Rscript -e 'install.packages("Rcpp", repos="https://mirrors.tuna.tsinghua.edu.cn/CRAN/", type="source")'
+
+      - name: Build RDolphinDB
+        run: |
+          cd ..
+          R CMD build api-r
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: RDolphinDB
+          path: ../*.tar.gz
